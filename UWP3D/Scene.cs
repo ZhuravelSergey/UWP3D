@@ -98,7 +98,7 @@ namespace UWP3D
 
         private void UpdateObjects()
         {
-            _sceneObjects.ExecuteByOrder((obj) =>
+            foreach(var obj in _sceneObjects)
             {
                 obj.SceneObject.Update();
 
@@ -106,17 +106,20 @@ namespace UWP3D
                 {
                     var gr = obj.SceneObject.GetGraphics();
 
-                    if (gr != null)
+                    if (obj.SceneObject.Transform.Changed)
                     {
-                        gr.Offset = obj.SceneObject.Transform.Position;
-                        gr.Scale = obj.SceneObject.Transform.Scale;
-                        gr.Orientation = Extensions.CreateQuaternion(obj.SceneObject.Transform.Rotation.X,
-                            obj.SceneObject.Transform.Rotation.Y, obj.SceneObject.Transform.Rotation.Z);
+                        if (gr != null)
+                        {
+                            gr.Offset = obj.SceneObject.Transform.Position;
+                            gr.Scale = obj.SceneObject.Transform.Scale;
+                            gr.Orientation = Extensions.CreateQuaternion(obj.SceneObject.Transform.Rotation.X,
+                                obj.SceneObject.Transform.Rotation.Y, obj.SceneObject.Transform.Rotation.Z);
+                        }
                     }
 
                     obj.SceneObject.Transform.Changed = false;
                 }
-            });
+            }
 
             Camera.Update();
         }

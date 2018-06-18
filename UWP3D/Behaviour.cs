@@ -9,16 +9,21 @@ namespace UWP3D
     public abstract class Behaviour
     {
         public virtual bool IsActive { get; set; }
+        public bool Async { get; set; }
 
         public Behaviour()
         {
             IsActive = true;
+            Async = false;
         }
 
         public virtual void Start()
         { }
 
         public virtual void Update()
+        { }
+
+        public async virtual Task UpdateAsync()
         { }
     }
 }

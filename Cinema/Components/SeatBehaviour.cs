@@ -32,10 +32,5 @@ namespace Cinema.Components
             _smoothMovementBehaviour.MoveTo(new System.Numerics.Vector3(this.Owner.Transform.Position.X,
                 _seat.Value.IsSelected ? 75 : _startY, this.Owner.Transform.Position.Z));
         }
-
-        public override void Update()
-        {
-            base.Update();
-        }
     }
 }

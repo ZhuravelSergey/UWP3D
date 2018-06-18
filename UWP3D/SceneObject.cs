@@ -165,10 +165,10 @@ namespace UWP3D
             {
                 e.Start();
             });
-            Children.ExecuteByOrder((c) =>
+            foreach(var c in _children)
             {
                 c.Start();
-            });
+            }
 
             IsStarted = true;
 
@@ -195,10 +195,10 @@ namespace UWP3D
             {
                 e.Update();
             });
-            Children.ExecuteByOrder((c) =>
+            foreach (var c in _children)
             {
                 c.Update();
-            });
+            }
 
             ProcessRequests(false);
         }

@@ -31,8 +31,6 @@ namespace Cinema.Components
                 ac *= -1;
 
             this.Owner.Transform.Rotation = Vector3.Lerp(this.Owner.Transform.Rotation, new Vector3(0, (float)ac, 0), 0.05f);
-
-            Debug.WriteLine(ac);
         }
     }
 }

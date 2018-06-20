@@ -22,8 +22,5 @@ namespace UWP3D
 
         public virtual void Update()
         { }
-
-        public async virtual Task UpdateAsync()
-        { }
     }
 }

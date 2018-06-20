@@ -11,45 +11,6 @@ namespace UWP3D
 {
     public static class Extensions
     {
-        internal static void ExecuteByOrder<T>(this IEnumerable<T> elements, Action<T> method)
-        {
-            List<(int, T)> items = new List<(int, T)>();
-
-            Dictionary<int, int> cache = new Dictionary<int, int>();
-
-            foreach (var e in elements)
-            {
-                var type = e.GetType();
-
-                int hc = type.GetHashCode();
-
-                if (!cache.ContainsKey(hc))
-                {
-                    var eo = type.GetTypeInfo().GetCustomAttribute<ExecutionOrder>();
-
-                    if (eo == null)
-                    {
-                        cache.Add(hc, int.MaxValue);
-                    }
-                    else
-                    {
-                        cache.Add(hc, eo.Order);
-                    }
-                }
-
-                items.Add((cache[hc], e));
-            }
-
-            var sorted = items.OrderBy(i => i.Item1);
-
-            foreach(var e in sorted)
-            {
-                method(e.Item2);
-            }
-
-            //sorted.AsParallel().ForAll((e) => method(e.Item2));
-        }
-
         public static (SceneObject sceneObject, TRenderer renderer) CreateSceneObjectWithRenderer<TRenderer>(Compositor compositor) 
             where TRenderer : Renderer
         {

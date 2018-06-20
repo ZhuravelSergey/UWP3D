@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UWP3D.Services;
 using Windows.UI.Composition;
 
 namespace UWP3D
@@ -14,11 +15,10 @@ namespace UWP3D
         private List<BehaviourComponent> _removeBehaviour;
         private List<BehaviourComponent> _addBehaviour;
         private SceneObject _parent;
-        private List<BehaviourComponent> _behaviours;
         private List<SceneObject> _children;
         private List<Entity> _entities;
-
-        internal bool IsStarted;
+        private BehaviourComponentsCache _behaviourComponentsCache;
+        private bool _isStarted;
 
         public Scene CurrentScene { get; internal set; }
         public override bool IsActive
@@ -48,7 +48,7 @@ namespace UWP3D
         public Transform Transform { get; private set; }
         public Renderer Renderer { get; set; }
 
-        public IReadOnlyList<BehaviourComponent> Behaviours => _behaviours;
+        public IReadOnlyList<BehaviourComponent> Behaviours => _behaviourComponentsCache.GetBehaiours();
         public IReadOnlyList<SceneObject> Children => _children;
         public List<Entity> Entities
         {
@@ -58,15 +58,15 @@ namespace UWP3D
 
         public SceneObject()
         {
-            IsStarted = false;
+            _isStarted = false;
             _removeChildren = new List<SceneObject>();
             _addChildren = new List<SceneObject>();
             _removeBehaviour = new List<BehaviourComponent>();
             _addBehaviour = new List<BehaviourComponent>();
-            _behaviours = new List<BehaviourComponent>();
             _children = new List<SceneObject>();
             _entities = new List<Entity>();
             IsActive = true;
+            _behaviourComponentsCache = new BehaviourComponentsCache();
 
             Transform = new Transform();
         }
@@ -161,16 +161,14 @@ namespace UWP3D
                 return;
             }
 
-            Behaviours.ExecuteByOrder((e) =>
-            {
-                e.Start();
-            });
+            _behaviourComponentsCache.Start();
+
             foreach(var c in _children)
             {
                 c.Start();
             }
 
-            IsStarted = true;
+            _isStarted = true;
 
             ProcessRequests(false);
         }
@@ -186,15 +184,13 @@ namespace UWP3D
                 return;
             }
 
-            if(!IsStarted)
+            if(!_isStarted)
             {
                 Start();
             }
 
-            Behaviours.ExecuteByOrder((e) =>
-            {
-                e.Update();
-            });
+            _behaviourComponentsCache.Update();
+
             foreach (var c in _children)
             {
                 c.Update();
@@ -225,7 +221,7 @@ namespace UWP3D
 
             foreach(var b in _addBehaviour)
             {
-                _behaviours.Add(b);
+                _behaviourComponentsCache.Add(b);
             }
             foreach(var c in _addChildren)
             {
@@ -234,7 +230,7 @@ namespace UWP3D
 
             foreach (var b in _removeBehaviour)
             {
-                _behaviours.Remove(b);
+                _behaviourComponentsCache.Remove(b);
             }
             foreach(var c in _removeChildren)
             {

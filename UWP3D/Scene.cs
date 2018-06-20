@@ -4,6 +4,7 @@ using System.Linq;
 using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
+using UWP3D.Services;
 using Windows.UI.Composition;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Hosting;
@@ -32,9 +33,12 @@ namespace UWP3D
         public Compositor CurrentCompositor { get; private set; }
         public IReadOnlyList<SceneObject> SceneObjects => _sceneObjects.Select(i => i.SceneObject).ToArray();
         public SceneObject Camera { get; set; }
+        public ServiceLocator ServiceLocator { get; private set; }
 
         public Scene(FrameworkElement target)
         {
+            ServiceLocator = new ServiceLocator();
+
             target.UseLayoutRounding = false;
 
             _sceneObjects = new List<SceneObjectContainer>();
@@ -48,14 +52,8 @@ namespace UWP3D
             CurrentCompositor = _hostVisual.Compositor;
 
             _rootContainerVisual = CurrentCompositor.CreateContainerVisual();
-            //_rootContainerVisual.Clip = CurrentCompositor.CreateInsetClip(0, 0, 0, 0);
 
             ElementCompositionPreview.SetElementChildVisual(target, _rootContainerVisual);
-
-            //var bindSizeAnimation = CurrentCompositor.CreateExpressionAnimation("hostVisual.Size");
-            //bindSizeAnimation.SetReferenceParameter("hostVisual", _hostVisual);
-
-            //_rootContainerVisual.StartAnimation("Size", bindSizeAnimation);
 
             Time.LastUpdate = DateTime.UtcNow;
             Time.Delta = 0;
@@ -86,9 +84,6 @@ namespace UWP3D
 
             Time.Delta = (DateTime.UtcNow.TimeOfDay.TotalMilliseconds - Time.LastUpdate.TimeOfDay.TotalMilliseconds) / 1000d;
             Time.LastUpdate = DateTime.UtcNow;
-
-            GC.Collect();
-            GC.WaitForPendingFinalizers();
         }
 
         private void UpdateLight()

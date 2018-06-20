@@ -120,6 +120,8 @@
     <Compile Include="Renderer.cs" />
     <Compile Include="Scene.cs" />
     <Compile Include="SceneObject.cs" />
+    <Compile Include="Services\BehaviourComponentsCache.cs" />
+    <Compile Include="Services\ServiceLocator.cs" />
     <Compile Include="SpotLightRenderer.cs" />
     <Compile Include="SpriteRenderer.cs" />
     <Compile Include="Time.cs" />
@@ -134,9 +136,7 @@
       <Version>4.5.0</Version>
     </PackageReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Services\" />
-  </ItemGroup>
+  <ItemGroup />
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>

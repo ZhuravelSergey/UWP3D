@@ -106,7 +106,7 @@
     <Compile Include="Components\SeatEntity.cs" />
     <Compile Include="Components\SeatSelectionChangedEventHandler.cs" />
     <Compile Include="Components\SmoothMovementBehaviour.cs" />
-    <Compile Include="Components\StopwatchBehaviour.cs" />
+    <Compile Include="Components\FPSBehaviour.cs" />
     <Compile Include="CinemaView.xaml.cs">
       <DependentUpon>CinemaView.xaml</DependentUpon>
     </Compile>

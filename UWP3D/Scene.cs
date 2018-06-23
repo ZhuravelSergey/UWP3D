@@ -86,6 +86,15 @@ namespace UWP3D
             Time.LastUpdate = DateTime.UtcNow;
         }
 
+        public void UpdateAsync()
+        {
+            UpdateObjectsAsync();
+            UpdateLight();
+
+            Time.Delta = (DateTime.UtcNow.TimeOfDay.TotalMilliseconds - Time.LastUpdate.TimeOfDay.TotalMilliseconds) / 1000d;
+            Time.LastUpdate = DateTime.UtcNow;
+        }
+
         private void UpdateLight()
         {
 
@@ -97,6 +106,38 @@ namespace UWP3D
             {
                 obj.SceneObject.Update();
 
+                if (obj.SceneObject.Transform.Changed)
+                {
+                    var gr = obj.SceneObject.GetGraphics();
+
+                    if (obj.SceneObject.Transform.Changed)
+                    {
+                        if (gr != null)
+                        {
+                            gr.Offset = obj.SceneObject.Transform.Position;
+                            gr.Scale = obj.SceneObject.Transform.Scale;
+                            gr.Orientation = Extensions.CreateQuaternion(obj.SceneObject.Transform.Rotation.X,
+                                obj.SceneObject.Transform.Rotation.Y, obj.SceneObject.Transform.Rotation.Z);
+                        }
+                    }
+
+                    obj.SceneObject.Transform.Changed = false;
+                }
+            }
+
+            Camera.Update();
+        }
+
+        private void UpdateObjectsAsync()
+        {
+            Parallel.ForEach(_sceneObjects, new ParallelOptions() { MaxDegreeOfParallelism = Environment.ProcessorCount },
+                (obj) =>
+                {
+                    obj.SceneObject.Update();
+                });
+
+            foreach (var obj in _sceneObjects)
+            {
                 if (obj.SceneObject.Transform.Changed)
                 {
                     var gr = obj.SceneObject.GetGraphics();

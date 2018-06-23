@@ -25,8 +25,8 @@ namespace Cinema
         {
             this.InitializeComponent();
 
-            int rows = 25;
-            int columns = 15;
+            int rows = 100;
+            int columns = 10;
 
             Seat[,] seats = new Seat[rows, columns];
 

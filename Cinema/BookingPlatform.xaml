@@ -11,7 +11,9 @@
     d:DesignWidth="400">
 
     <Grid Background="#26000000" >
-        <controls:UniformGrid x:Name="Container" Rows="0" Columns="0">
-        </controls:UniformGrid>
+        <ScrollViewer>
+            <controls:UniformGrid x:Name="Container" Rows="0" Columns="0">
+            </controls:UniformGrid>
+        </ScrollViewer>
     </Grid>
 </UserControl>

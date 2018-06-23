@@ -84,7 +84,7 @@ namespace Cinema
 
         private void CompositionTarget_Rendering(object sender, object e)
         {
-            _scene.Update();
+            _scene.UpdateAsync();
         }
         #endregion
 
@@ -95,7 +95,7 @@ namespace Cinema
 #if DEBUG
             SceneObject so = new SceneObject();
             so.IsActive = true;
-            so.AddBehaviour(new StopwatchBehaviour());
+            so.AddBehaviour(new FPSBehaviour());
 
             _scene.AddObject(so);
 #endif
@@ -201,6 +201,7 @@ namespace Cinema
 
                     sceneObject.AddBehaviour(new SmoothMovementBehaviour());
                     sceneObject.AddBehaviour(new SeatBehaviour());
+                    sceneObject.AddBehaviour(new RotationBehaviour());
 
                     sceneObject.Transform.Position = position;
                     renderer.Size = new Vector2(_seatSize.X, _seatSize.Y / 3);
@@ -209,8 +210,8 @@ namespace Cinema
                     var entity = new SeatEntity(seat);
                     entity.SelectionChanged += async delegate
                     {
-                        if(position.Z > _scene.Camera.Transform.Position.Z)
-                            await Task.Delay(1000);
+                        //if(position.Z > _scene.Camera.Transform.Position.Z)
+                        //    await Task.Delay(1000);
 
                         if(entity.Value.IsSelected)
                         {
